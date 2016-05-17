@@ -9,7 +9,8 @@ Example:
         $token_filter->content = 'replace content a token';
 
         if (!parent::install()
-            || !$token_filter->save())
+            || !$token_filter->save()
+            || !$this->registerHook('replaceToken'))
             return false;
 
         return true;
