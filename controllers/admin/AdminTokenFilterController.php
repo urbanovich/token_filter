@@ -179,4 +179,18 @@ class AdminTokenFilterController extends ModuleAdminController
         return strip_tags(stripslashes($description));
     }
 
+    public function ajaxProcessStatusTokenFilter()
+    {
+        if (!$id_token_filter = (int)Tools::getValue('id_token_filter')) {
+            die(Tools::jsonEncode(array('success' => false, 'error' => true, 'text' => $this->l('Failed to update the status'))));
+        } else {
+            $token_filter = new TokenFilter((int)$id_token_filter);
+            if (Validate::isLoadedObject($token_filter)) {
+                $token_filter->active = $token_filter->active == 1 ? 0 : 1;
+                $token_filter->save() ?
+                    die(Tools::jsonEncode(array('success' => true, 'text' => $this->l('The status has been updated successfully')))) :
+                    die(Tools::jsonEncode(array('success' => false, 'error' => true, 'text' => $this->l('Failed to update the status'))));
+            }
+        }
+    }
 }
